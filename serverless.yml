@@ -19,18 +19,19 @@ service: product-management # NOTE: update this with your service name
 
 
 custom:
-  productsTableName: 'product'
+  productsTableName: 'products-${self:provider.stage}'
 
 provider:
   name: aws
   runtime: java8
+  stage: dev
   region: ${opt:region, 'us-east-1'}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
         - "dynamodb:*"
       Resource:
-        - { "Fn::GetAtt": ["product", "Arn" ] }
+        - { "Fn::GetAtt": ["ProductsDynamoDBTable", "Arn" ] }
   environment:
     PRODUCTS_TABLE_NAME: ${self:custom.productsTableName}
 
